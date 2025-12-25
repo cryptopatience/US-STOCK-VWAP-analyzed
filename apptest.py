@@ -950,7 +950,7 @@ def get_gemini_stock_analysis(ticker, stock_data, fundamental_data):
         return f"❌ Gemini 분석 오류: {str(e)}"
 
 # ==================== 메인 앱 ====================
-st.title("📊 Anchored VWAP 분석 대시보드")
+st.title("📊 US stock Anchored VWAP 분석")
 st.markdown("### S&P 500 시가총액 상위 30개 종목 분기별 분석")
 
 # 사이드바
