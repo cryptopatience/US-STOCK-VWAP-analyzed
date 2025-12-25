@@ -491,7 +491,7 @@ def get_gemini_market_analysis(market_data):
         return "❌ Gemini AI가 비활성화되어 있습니다. secrets.toml에 GEMINI_API_KEY를 추가하세요."
     
     try:
-        model = genai.GenerativeModel('gemini-2.0-flash-exp')
+        model = genai.GenerativeModel('gemini-2.5-flash')
         
         # 데이터 요약 생성
         data_summary = f"""
@@ -603,7 +603,7 @@ def get_gemini_market_analysis(market_data):
         return response.text
         
     except Exception as e:
-        return f"❌ Gemini AI 분석 실패: {str(e)}\n\n힌트: 모델명 'gemini-2.0-flash-exp' 또는 'gemini-1.5-flash'를 확인하세요."
+        return f"❌ Gemini AI 분석 실패: {str(e)}\n\n힌트: 모델명 'gemini-2.5-flash' 또는 'gemini-1.5-flash'를 확인하세요."
 
 def get_openai_stock_analysis(ticker, stock_data, fundamental_data):
     """OpenAI를 활용한 개별 종목 분석"""
@@ -733,7 +733,7 @@ def get_gemini_stock_analysis(ticker, stock_data, fundamental_data):
         return "❌ Gemini AI가 비활성화되어 있습니다. secrets.toml에 GEMINI_API_KEY를 추가하세요."
     
     try:
-        model = genai.GenerativeModel('gemini-2.0-flash-exp')
+        model = genai.GenerativeModel('gemini-2.5-flash')
         
         # 종목 데이터 페이로드 구성
         stock_payload = {
@@ -1361,7 +1361,7 @@ with tab6:
         4. 무료 할당량: 분당 15회, 일당 1,500회
         """)
     else:
-        st.success("✅ Gemini 연결됨 (모델: gemini-2.0-flash-exp)")
+        st.success("✅ Gemini 연결됨 (모델: gemini-2.5-flash)")
         st.info("💡 월스트리트 리서치 리포트 수준의 심층적인 투자 인사이트를 제공합니다.")
     
     col1, col2 = st.columns([3, 1])
@@ -1579,7 +1579,7 @@ with tab7:
             elif ai_engine == "🧠 Gemini" and GEMINI_ENABLED:
                 # Gemini 챗봇
                 try:
-                    model = genai.GenerativeModel('gemini-2.0-flash-exp')
+                    model = genai.GenerativeModel('gemini-2.5-flash')
                     
                     # 대화 컨텍스트 구성
                     context = f"""
