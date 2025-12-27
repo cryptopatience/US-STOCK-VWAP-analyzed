@@ -102,16 +102,27 @@ def get_current_quarter_start():
 
 # ==================== 유틸리티 함수 (수정 후) ====================
 
-@st.cache_data(ttl=86400)  # 하루 1회 갱신
+# 수정 후 코드 (상단에 import requests 필수)
+@st.cache_data(ttl=86400)
 def get_sp500_tickers_from_wiki():
-    """🟢 추가됨: 위키피디아에서 S&P 500 리스트 실시간 크롤링"""
     try:
         url = 'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies'
-        payload = pd.read_html(url)
-        df = payload[0]  # 첫 번째 테이블이 종목 리스트
+        
+        # 🟢 1. 브라우저인 척 위장하는 헤더 추가
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+        }
+        
+        # 🟢 2. requests로 먼저 데이터를 가져옴
+        response = requests.get(url, headers=headers)
+        response.raise_for_status() 
+        
+        # 🟢 3. 가져온 텍스트(response.text)를 pandas에 전달
+        payload = pd.read_html(response.text)
+        df = payload[0]
         tickers = df['Symbol'].values.tolist()
-        # Yahoo Finance 호환용 변환 (BRK.B -> BRK-B)
         return [t.replace('.', '-') for t in tickers]
+        
     except Exception as e:
         st.error(f"리스트 로드 실패: {e}")
         return []
