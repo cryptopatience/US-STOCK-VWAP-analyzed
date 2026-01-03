@@ -100,9 +100,10 @@ def get_current_quarter_start():
     quarter_start = datetime(now.year, quarter_start_month, 1)
     return quarter_start
 
+
 @st.cache_data(ttl=3600)
 def get_top_30_tickers():
-    """실시간 시가총액 상위 30개 종목 수집"""
+    """실시간 시가총액 상위 30개 종목 수집 (방어 코드 포함)"""
     sp500_major_tickers = [
         'AAPL', 'MSFT', 'GOOGL', 'GOOG', 'AMZN', 'NVDA', 'META', 'TSLA', 'BRK-B', 'LLY',
         'V', 'UNH', 'XOM', 'WMT', 'JPM', 'MA', 'JNJ', 'PG', 'AVGO', 'HD',
@@ -134,6 +135,7 @@ def get_top_30_tickers():
                     'Sector': info.get('sector', 'N/A')
                 })
             
+            # 진행률 업데이트 (너무 빠르면 차단될 수 있으므로 약간의 텀을 주면 좋음)
             progress_bar.progress((idx + 1) / len(sp500_major_tickers))
             status_text.text(f"수집 중: {ticker} ({idx+1}/{len(sp500_major_tickers)})")
         except:
@@ -142,10 +144,23 @@ def get_top_30_tickers():
     progress_bar.empty()
     status_text.empty()
     
+    # [수정된 부분] 데이터가 하나도 없을 경우 빈 DataFrame 반환 (컬럼 지정)
+    if not market_caps:
+        st.error("❌ Yahoo Finance 데이터 수집 실패 (API 차단 또는 네트워크 오류)")
+        # 빈 데이터프레임이지만 컬럼은 존재하게 만듦
+        return pd.DataFrame(columns=['Ticker', 'Market_Cap', 'Company', 'Sector'])
+    
     df_market_cap = pd.DataFrame(market_caps)
-    df_market_cap = df_market_cap.sort_values('Market_Cap', ascending=False).head(30)
+    
+    # 데이터가 있을 때만 정렬 수행
+    if not df_market_cap.empty and 'Market_Cap' in df_market_cap.columns:
+        df_market_cap = df_market_cap.sort_values('Market_Cap', ascending=False).head(30)
     
     return df_market_cap
+
+
+
+
 
 def calculate_anchored_vwap(df):
     """Anchored VWAP 계산"""
