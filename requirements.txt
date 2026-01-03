@@ -6,7 +6,7 @@ pandas>=2.0.0
 numpy>=1.24.0
 
 # 데이터 수집
-yfinance>=0.2.28
+yfinance>=0.2.40
 pykrx>=1.0.36
 
 # 시각화
