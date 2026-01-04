@@ -1397,10 +1397,10 @@ with tab5:
              if st.button("🔍 선택 종목 분석", type="primary"):
                  with st.spinner(f"🤖 OpenAI가 {selected_ticker}를 분석하고 있습니다..."):
                      # 종목 데이터 준비 (VWAP 아래 종목도 처리)
-                 stock_data = df_results[df_results['Ticker'] == selected_ticker].iloc[0].to_dict()
-                 fundamental_data = get_comprehensive_analysis(selected_ticker)
-                 analysis_result = get_openai_stock_analysis(selected_ticker, stock_data, fundamental_data)
-                 st.session_state[f'openai_stock_analysis_{selected_ticker}'] = analysis_result
+                     stock_data = df_results[df_results['Ticker'] == selected_ticker].iloc[0].to_dict()
+                     fundamental_data = get_comprehensive_analysis(selected_ticker)
+                     analysis_result = get_openai_stock_analysis(selected_ticker, stock_data, fundamental_data)
+                     st.session_state[f'openai_stock_analysis_{selected_ticker}'] = analysis_result
         
         
         
@@ -1503,7 +1503,7 @@ with tab6:
             
                     analysis_result = get_gemini_stock_analysis(selected_ticker_gemini, stock_data, fundamental_data)
                     st.session_state[f'gemini_stock_analysis_{selected_ticker_gemini}'] = analysis_result
-        
+             
        
         # 분석 결과 표시
         for key in list(st.session_state.keys()):
